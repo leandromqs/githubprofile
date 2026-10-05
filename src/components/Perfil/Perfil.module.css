@@ -1,0 +1,20 @@
+.header{
+    background-color: var(--corPrincipal);
+    padding: 40px 0 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.fotoPerfil{
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    margin-bottom: 16px;
+}
+
+.nomePerfil{
+    color: var(--whiteColor);
+    font-size: 1.5rem;
+}
