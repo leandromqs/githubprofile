@@ -5,6 +5,7 @@ import styles from './RepoList.module.css'
 function RepoList({ userRepos }) {
     const [repos, setRepoList] = useState([]);
     const [estaCarregando, setEstaCarregando] = useState(true)
+    const [usuarioNaoExiste, setUsuarioNaoExiste] = useState(false)
 
     useEffect(() => {
         setEstaCarregando(true)
@@ -17,13 +18,14 @@ function RepoList({ userRepos }) {
                 }, 3000)
             })
             .catch(e => {
-                alert('O suário não existe.')
+                setUsuarioNaoExiste(true)
             })
     }, [userRepos])
 
     return (
         <>
-            {repos > 0 ? (
+            {usuarioNaoExiste ? (
+
                 <div class="container">
                     {estaCarregando ? (
                         <h1 className={styles.carregando}>Carregando...</h1>
@@ -45,18 +47,15 @@ function RepoList({ userRepos }) {
                         </ul>
                     )}
                 </div>
-
             ) : (
                 <div class="container">
                     {estaCarregando ? (
                         <h1 className={styles.carregando}>Carregando...</h1>
                     ) : (
-                        <h1 className={styles.notfound}>O usuário não existe!</h1>
+                       <h1 className={styles.notfound}>O usuário não existe.</h1>
                     )}
                 </div>
-
             )}
-
         </>
     )
 }
