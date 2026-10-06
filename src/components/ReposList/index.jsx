@@ -3,29 +3,39 @@ import styles from './RepoList.module.css'
 
 
 function RepoList({ userRepos }) {
+
     const [repos, setRepoList] = useState([]);
     const [estaCarregando, setEstaCarregando] = useState(true)
-    const [usuarioNaoExiste, setUsuarioNaoExiste] = useState(false)
+    const [usuarioExiste, setUsuarioExiste] = useState(true)
 
     useEffect(() => {
         setEstaCarregando(true)
+        setUsuarioExiste(true)
         fetch(`https://api.github.com/users/${userRepos}/repos`)
-            .then(res => res.json())
+            .then(res => {
+                if (res.ok == false) {
+                    throw new Error('Perfil não encontrado')
+                }
+                return res.json()
+            })
             .then(resJson => {
                 setTimeout(() => {
                     setEstaCarregando(false)
                     setRepoList(resJson)
                 }, 3000)
             })
-            .catch(e => {
-                setUsuarioNaoExiste(true)
+            .catch(error => {
+                setTimeout(() => {
+                    setUsuarioExiste(false)
+                    setEstaCarregando(false)
+                }, 3000)
             })
+
     }, [userRepos])
 
     return (
         <>
-            {usuarioNaoExiste ? (
-
+            {usuarioExiste ? (
                 <div class="container">
                     {estaCarregando ? (
                         <h1 className={styles.carregando}>Carregando...</h1>
@@ -52,10 +62,11 @@ function RepoList({ userRepos }) {
                     {estaCarregando ? (
                         <h1 className={styles.carregando}>Carregando...</h1>
                     ) : (
-                       <h1 className={styles.notfound}>O usuário não existe.</h1>
+                        <h1 className={styles.notfound}>O usuário não foi encontrado.</h1>
                     )}
                 </div>
             )}
+
         </>
     )
 }
